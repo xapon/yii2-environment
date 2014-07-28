@@ -48,7 +48,9 @@ We assume the vendor directory is placed in application root.
 
 ### Installation from zip file
 
-See the previous instructions: https://github.com/xapon/yii2-environment/tree/1.0.0#installation
+Download [zip archive](https://github.com/xapon/yii2-environment/archive/master.zip) and extract it to, say,
+`components` directory. Then include the Environment class manually in your index.php since composer autoload will not be
+available for it.
 
 ### Setting environment
 
