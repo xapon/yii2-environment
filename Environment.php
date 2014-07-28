@@ -1,8 +1,9 @@
 <?php
-namespace marcovtwout\YiiEnvironment;
+namespace xapon\YiiEnvironment;
 
 /**
  * @name Environment
+ * @author Anton Sergeyev
  * @author Marco van 't Wout | Tremani
  *
  * Simple class used to set configuration and debugging depending on environment.
@@ -21,7 +22,7 @@ class Environment
     /**
      * @var string name of env var to check
      */
-    protected $envVar = 'YII_ENVIRONMENT';
+    protected $envVar = 'YII_ENV';
     
     /**
      * @var string selected environment mode
@@ -49,14 +50,24 @@ class Environment
     public $yiitPath;
 
     /**
+     * @var string yii environment
+     */
+    public $yiiEnv;
+
+    /**
      * @var int debug level
      */
     public $yiiDebug;
 
     /**
-     * @var int trace level
+     * @var array
      */
-    public $yiiTraceLevel;
+    public $aliases=[];
+
+    /**
+     * @var array
+     */
+    public $classMap=[];
 
     /**
      * @var array web config array
@@ -84,7 +95,7 @@ class Environment
 
     /**
      * Initilizes the Environment class with the given mode
-     * @param constant $mode used to override automatically setting mode
+     * @param string $mode used to override automatically setting mode
      * @param string $configDir override default configDir
      */
     public function __construct($mode = null, $configDir = null)
@@ -110,6 +121,7 @@ class Environment
     /**
      * Set environment mode, if valid mode can be determined.
      * @param string $mode if left empty, determine automatically
+     * @throws \Exception
      */
     protected function setMode($mode = null)
     {
@@ -132,6 +144,7 @@ class Environment
      * Also checks if there is a mode file that might override this environment.
      * Override this function if you want to implement your own method.
      * @return string mode
+     * @throws \Exception
      */
     protected function determineMode()
     {
@@ -159,6 +172,7 @@ class Environment
     /**
      * Load and merge config files into one array.
      * @return array $config array to be processed by setEnvironment.
+     * @throws \Exception
      */
     protected function getConfig()
     {
@@ -205,8 +219,8 @@ class Environment
         if (isset($config['yiitPath'])) {
             $this->yiitPath = $config['yiitPath'];
         }
-        $this->yiiDebug = $config['yiiDebug'];
-        $this->yiiTraceLevel = $config['yiiTraceLevel'];
+        $this->yiiEnv = isset($config['yiiEnv']) ? $config['yiiEnv'] : $this->mode;
+
         $this->configWeb = $config['configWeb'];
         $this->configWeb['params']['environment'] = strtolower($this->mode);
 
@@ -216,6 +230,19 @@ class Environment
             $this->processInherits($this->configConsole); // Process configConsole for inherits
             $this->configConsole['params']['environment'] = strtolower($this->mode);
         }
+    }
+
+    /**
+     * Run Yii static functions.
+     * Call this function after including the Yii framework in your bootstrap file.
+     */
+    public function runYiiStatics()
+    {
+        // Yii::setPathOfAlias();
+        foreach ($this->aliases as $alias => $path) {
+            Yii::setAlias($alias, $path);
+        }
+        Yii::$classMap = array_merge(Yii::$classMap, $this->classMap);
     }
 
     /**
@@ -255,8 +282,8 @@ class Environment
 
     /**
      * Loop through console config array, replacing values called 'inherit' by values from $this->configWeb
-     * @param type $array target array
-     * @param type $path array that keeps track of current path
+     * @param array $array target array
+     * @param array $path array that keeps track of current path
      */
     private function processInherits(&$array, $path = array())
     {

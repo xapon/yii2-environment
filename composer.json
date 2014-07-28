@@ -1,29 +1,29 @@
 {
-    "name": "marcovtwout/yii-environment",
-    "description": "Environment class for Yii, used to set configuration for console and web apps depending on the server environment.",
-    "keywords": ["yii", "environment"],
-    "homepage": "https://github.com/marcovtwout/yii-environment",
+    "name": "xapon/yii-environment",
+    "description": "Environment class for Yii2, used to set configuration for console and web apps depending on the server environment.",
+    "keywords": ["yii2", "yii", "environment"],
+    "homepage": "https://github.com/xapon/yii2-environment",
     "type": "library",
     "license": "BSD-3-Clause",
     "authors": [
         {
-            "name": "Marco van 't Wout",
-            "email": "mr@vtwout.net"
+            "name": "Anton Sergeyev",
+            "email": "sergeyev.anton.s@gmail.com"
         }
     ],
     "support": {
-        "issues": "https://github.com/marcovtwout/yii-environment/issues?state=open",
-        "source": "https://github.com/marcovtwout/yii-environment"
+        "issues": "https://github.com/xapon/yii2-environment/issues?state=open",
+        "source": "https://github.com/xapon/yii2-environment"
     },
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.4"
     },
     "autoload": {
-        "psr-4": { "marcovtwout\\YiiEnvironment\\": "" }
+        "psr-4": { "xapon\\YiiEnvironment\\": "" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "5.0.x-dev"
+            "dev-master": "1.0.x-dev"
         }
     }
 }
