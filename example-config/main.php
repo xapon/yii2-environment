@@ -5,122 +5,84 @@
  * All properties can be overridden in mode_<mode>.php files
  */
 
-return array(
+return [
 
     // Set yiiPath
     'yiiPath' => __DIR__ . '/../vendor/yiisoft/yii/framework/yii.php',
-    'yiicPath' => __DIR__ . '/../vendor/yiisoft/yii/framework/yiic.php',
-    'yiitPath' => __DIR__ . '/../vendor/yiisoft/yii/framework/yiit.php',
 
-    // Set YII_DEBUG and YII_TRACE_LEVEL flags
+    // Set YII_DEBUG flag
     'yiiDebug' => true,
-    'yiiTraceLevel' => 0,
+    // Set YII_ENV constant. In empty, current mode will be used instead
+    //'yiiEnv'=>'test',
+
+
+    // Aliases
+    'aliases' => [
+        // uncomment the following to define a path alias
+        //'@local' => 'path/to/local-folder'
+    ],
 
     // This is the main Web application configuration. Any writable
     // CWebApplication properties can be configured here.
-    'configWeb' => array(
-    
-        'basePath' => __DIR__ . '/..',
+    'configWeb' => [
+        'basePath' => dirname(__DIR__),
         'name' => 'My Web Application',
-        
-        // Aliases
-        'aliases' => array(
-            // uncomment the following to define a path alias
-            //'local' => 'path/to/local-folder'
-        ),
+
 
         // Preloading 'log' component
-        'preload' => array('log'),
-
-        // Autoloading model and component classes
-        'import' => array(
-            'application.models.*',
-            'application.components.*',
-        ),
+        'bootstrap' => ['log'],
         
         // Application components
-        'components' => array(
+        'components' => [
         
-            'user' => array(
+            'user' => [
                 // enable cookie-based authentication
                 'allowAutoLogin' => true,
-            ),
-            
-            // uncomment the following to enable URLs in path-format
-            /*
-            'urlManager'=>array(
-                'urlFormat'=>'path',
-                'rules'=>array(
-                    '<controller:\w+>/<id:\d+>'=>'<controller>/view',
-                    '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-                    '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-                ),
-            ),
-            */
+            ],
 
             // Database
-            'db' => array(
-                'connectionString' => '', //override in config/mode_<mode>.php
+            'db' => [
+                'dsn' => '', //override in config/mode_<mode>.php
                 'username' => '', //override in config/mode_<mode>.php
                 'password' => '', //override in config/mode_<mode>.php
                 'charset' => 'utf8',
-            ),
+            ],
+        ],
 
-            // Error handler
-            'errorHandler'=>array(
-                // use 'site/error' action to display errors
-                'errorAction'=>'site/error',
-            ),
-
-        ),
-
-        // application-level parameters that can be accessed
-        // using Yii::app()->params['paramName']
-        'params'=>array(
-            // this is used in contact page
-            'adminEmail'=>'webmaster@example.com',
-        ),
-
-    ),
+    ],
 
     // This is the Console application configuration. Any writable
-    // CConsoleApplication properties can be configured here.
+    // ConsoleApplication properties can be configured here.
     // Leave array empty if not used.
-    // Use value 'inherit' to copy from generated configWeb.
-    'configConsole' => array(
+    // Use value '@' to copy from generated configWeb.
+    'configConsole' => [
     
-        'basePath' => __DIR__ . '/..',
+        'basePath' =>'@',
         'name' => 'My Console Application',
         
         // Aliases
-        'aliases' => 'inherit',
+        'aliases' => '@',
 
         // Preloading 'log' component
-        'preload' => array('log'),
+        'preload' => '@',
 
         // Autoloading model and component classes
-        'import'=>'inherit',
+        'import'=>'@',
+
+        'controllerMap' => [
+            'fixture' => [
+                'class' => 'yii\faker\FixtureController',
+            ],
+        ],
 
         // Application componentshome
-        'components'=>array(
+        'components'=>[
 
             // Database
-            'db'=>'inherit',
+            'db'=>'@',
 
-            // Application Log
-            'log' => array(
-                'class' => 'CLogRouter',
-                'routes' => array(
-                    // Save log messages on file
-                    array(
-                        'class' => 'CFileLogRoute',
-                        'levels' => 'error, warning, trace, info',
-                    ),
-                ),
-            ),
+        ],
 
-        ),
+    ],
 
-    ),
-
-);
+];

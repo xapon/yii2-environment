@@ -8,7 +8,7 @@ namespace xapon\YiiEnvironment;
  *
  * Simple class used to set configuration and debugging depending on environment.
  * Using this you can predefine configurations for use in different environments,
- * like _development, testing, staging and production_.
+ * like _dev, test, staging and prod_.
  *
  * @see README.md
  */
@@ -17,17 +17,22 @@ class Environment
     /**
      * Inherit key that can be used in configConsole
      */
-    const INHERIT_KEY = 'inherit';
+    const INHERIT_KEY = '@';
 
     /**
      * @var string name of env var to check
      */
     protected $envVar = 'YII_ENV';
-    
+
     /**
      * @var string selected environment mode
      */
     protected $mode;
+
+    /**
+     * @var string filename where mode is stored
+     */
+    public $modeFileName = 'mode.php';
 
     /**
      * @var string config dir
@@ -38,16 +43,6 @@ class Environment
      * @var string path to yii.php
      */
     public $yiiPath;
-
-    /**
-     * @var string path to yiic.php
-     */
-    public $yiicPath;
-
-    /**
-     * @var string path to yiit.php
-     */
-    public $yiitPath;
 
     /**
      * @var string yii environment
@@ -62,12 +57,12 @@ class Environment
     /**
      * @var array
      */
-    public $aliases=[];
+    public $aliases = [];
 
     /**
      * @var array
      */
-    public $classMap=[];
+    public $classMap = [];
 
     /**
      * @var array web config array
@@ -86,15 +81,15 @@ class Environment
     protected function getValidModes()
     {
         return array(
-            100 => 'DEVELOPMENT',
-            200 => 'TEST',
-            300 => 'STAGING',
-            400 => 'PRODUCTION'
+            100 => 'dev',
+            200 => 'test',
+            300 => 'staging',
+            400 => 'prod'
         );
     }
 
     /**
-     * Initilizes the Environment class with the given mode
+     * Initializes the Environment class with the given mode
      * @param string $mode used to override automatically setting mode
      * @param string $configDir override default configDir
      */
@@ -104,7 +99,7 @@ class Environment
         $this->setMode($mode);
         $this->setEnvironment();
     }
-    
+
     /**
      * Set config dir.
      * @param string $configDir
@@ -114,7 +109,7 @@ class Environment
         if ($configDir !== null) {
             $this->configDir = rtrim($configDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         } else {
-            $this->configDir = __DIR__ . '/../../../config/';
+            $this->configDir = '.' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
         }
     }
 
@@ -131,14 +126,14 @@ class Environment
         }
 
         // Check if mode is valid
-        $mode = strtoupper($mode);
+        $mode = strtolower($mode);
         if (!in_array($mode, $this->getValidModes(), true)) {
-            throw new \Exception('Invalid environment mode supplied or selected.');
+            throw new \Exception('Invalid environment mode supplied or selected: ' . $mode);
         }
 
         $this->mode = $mode;
     }
-    
+
     /**
      * Determine current environment mode depending on environment variable.
      * Also checks if there is a mode file that might override this environment.
@@ -160,13 +155,13 @@ class Environment
         }
         return $mode;
     }
-    
+
     /**
      * @return string mode file path
      */
     protected function getModeFilePath()
     {
-        return $this->configDir . 'mode.php';
+        return $this->configDir . $this->modeFileName;
     }
 
     /**
@@ -213,12 +208,6 @@ class Environment
 
         // Set attributes
         $this->yiiPath = $config['yiiPath'];
-        if (isset($config['yiicPath'])) {
-            $this->yiicPath = $config['yiicPath'];
-        }
-        if (isset($config['yiitPath'])) {
-            $this->yiitPath = $config['yiitPath'];
-        }
         $this->yiiEnv = isset($config['yiiEnv']) ? $config['yiiEnv'] : $this->mode;
 
         $this->configWeb = $config['configWeb'];
@@ -230,19 +219,26 @@ class Environment
             $this->processInherits($this->configConsole); // Process configConsole for inherits
             $this->configConsole['params']['environment'] = strtolower($this->mode);
         }
+
+        $this->classMap = isset($config['classMap']) ? $config['classMap'] : [];
+        $this->aliases = isset($config['aliases']) ? $config['aliases'] : [];
     }
 
     /**
-     * Run Yii static functions.
-     * Call this function after including the Yii framework in your bootstrap file.
+     * Defines Yii constants, includes base yii class and sets aliases and classmap
      */
-    public function runYiiStatics()
+    public function setup()
     {
-        // Yii::setPathOfAlias();
+        //set yii constants
+        defined('YII_DEBUG') or define('YII_DEBUG', $this->yiiDebug);
+        defined('YII_ENV') or define('YII_ENV', $this->yiiEnv);
+        //include yii
+        require_once($this->yiiPath);
+        //set aliases and classmap
         foreach ($this->aliases as $alias => $path) {
-            Yii::setAlias($alias, $path);
+            \Yii::setAlias($alias, $path);
         }
-        Yii::$classMap = array_merge(Yii::$classMap, $this->classMap);
+        \Yii::$classMap = array_merge(\Yii::$classMap, $this->classMap);
     }
 
     /**

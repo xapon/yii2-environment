@@ -1,2 +1,2 @@
 # Set Yii environment
-SetEnv YII_ENVIRONMENT DEVELOPMENT
+SetEnv YII_ENV DEV

@@ -1,51 +1,42 @@
 <?php
-
 /**
  * Local configuration override.
  * Use this to override elements in the config array (combined from main.php and mode_x.php)
  * NOTE: When using a version control system, do NOT commit this file to the repository.
  */
-
-return array(
-
-    // Set YII_DEBUG and YII_TRACE_LEVEL flags
+return [
+    // Set YII_DEBUG and YII_ENV constants
     //'yiiDebug' => true,
-    //'yiiTraceLevel' => 3,
+    //'yiiEnv' => 'test',
 
     // This is the specific Web application configuration for this mode.
     // Supplied config elements will be merged into the main config array.
-    'configWeb' => array(
-
-        // Application components
-        'components' => array(
-
-            // Database
-            /*'db' => array(
-                'connectionString' => 'mysql:host=LOCAL_HOST;dbname=LOCAL_DB',
-                'username' => 'USERNAME',
-                'password' => 'PASSWORD',
-            ),*/
-
-        ),
-
-    ),
+    'configWeb' => [
+        'components' => [
+            'db' => [
+                'dsn' => 'mysql:host=localhost;dbname=local-db',
+                'username' => 'root',
+                'password' => 'root',
+            ],
+        ],
+    ],
 
     // This is the Console application configuration. Any writable
-    // CConsoleApplication properties can be configured here.
-    // Use 'inherit' to copy from generated configWeb
-    'configConsole' => array(
+    // ConsoleApplication properties can be configured here.
+    // Use '@' to copy from generated configWeb
+    'configConsole' => [
 
         // Application components
-        'components' => array(
+        'components' => [
 
             // Database
-            /*'db' => array(
-                'connectionString' => 'mysql:host=LOCAL_HOST;dbname=LOCAL_DB',
+            /*'db' => [
+                'dsn' => 'mysql:host=LOCAL_HOST;dbname=LOCAL_DB',
                 'username' => 'USERNAME',
                 'password' => 'PASSWORD',
-            ),*/
+            ],*/
 
-        ),
+        ],
 
-    ),
-);
+    ],
+];

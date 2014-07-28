@@ -7,7 +7,7 @@
  * If you use the extended class, don't forget to modify your bootstrap file as well
  * to call this class.
  */
-class ExampleEnvironment extends \marcovtwout\YiiEnvironment\Environment
+class ExampleEnvironment extends \xapon\YiiEnvironment\Environment
 {
 
     /**
@@ -22,7 +22,7 @@ class ExampleEnvironment extends \marcovtwout\YiiEnvironment\Environment
     protected function getValidModes()
     {
         return array_merge(parent::getValidModes(), array(
-            250 => 'QUALITY_ASSURANCE',
+            250 => 'quality_assurance',
         ));
     }
 }

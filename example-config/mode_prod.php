@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Staging configuration
+ * Production configuration
  * Usage:
  * - Online website
  * - Production DB
- * - All details on error
+ * - Standard production error pages (404, 500, etc.)
  */
 
 return [
-    'yiiDebug' => true,
+    'yiiDebug' => false,
     'configWeb' => [
         'bootstrap' => [],
     ],
