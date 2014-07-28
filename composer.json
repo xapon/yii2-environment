@@ -1,5 +1,5 @@
 {
-    "name": "xapon/yii-environment",
+    "name": "xapon/yii2-environment",
     "description": "Environment class for Yii2, used to set configuration for console and web apps depending on the server environment.",
     "keywords": ["yii2", "yii", "environment"],
     "homepage": "https://github.com/xapon/yii2-environment",
