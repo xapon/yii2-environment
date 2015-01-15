@@ -8,7 +8,7 @@
 return [
 
     // Set yiiPath
-    'yiiPath' => __DIR__ . '/../vendor/yiisoft/yii/framework/yii.php',
+    'yiiPath' => __DIR__ . '/../vendor/yiisoft/yii2/Yii.php',
 
     // Set YII_DEBUG flag
     'yiiDebug' => true,
@@ -63,8 +63,8 @@ return [
         // Aliases
         'aliases' => '@',
 
-        // Preloading 'log' component
-        'preload' => '@',
+        // Preloading components
+        'bootstrap' => '@',
 
         // Autoloading model and component classes
         'import'=>'@',
